@@ -118,11 +118,12 @@ export default function EditSpecies({species, userId}: SpeciesCardProps){
                 name="common_name"
                 render={({ field }) => {
                   // We must extract value from field and convert a potential defaultValue of `null` to "" because inputs can't handle null values: https://github.com/orgs/react-hook-form/discussions/4091
+                  const { value, ...rest } = field;
                   return (
                     <FormItem>
                       <FormLabel>Common Name</FormLabel>
                       <FormControl>
-                        <Input {...field}
+                        <Input value={value ?? ""} {...rest}
                         defaultValue={species.common_name ?? ""}/>
                       </FormControl>
                       <FormMessage />
@@ -210,13 +211,15 @@ export default function EditSpecies({species, userId}: SpeciesCardProps){
                 control={form.control}
                 name="description"
                 render={({ field }) => {
+                  const { value, ...rest } = field;
                   return (
                     <FormItem>
                       <FormLabel>Description</FormLabel>
                       <FormControl>
                         <Textarea
+                          value={value ?? ""}
                           defaultValue={species.description ?? ""}
-                          {...field}
+                          {...rest}
                         />
                       </FormControl>
                       <FormMessage />
