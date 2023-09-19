@@ -123,8 +123,10 @@ export default function EditSpecies({species, userId}: SpeciesCardProps){
                     <FormItem>
                       <FormLabel>Common Name</FormLabel>
                       <FormControl>
-                        <Input value={value ?? ""} {...rest}
-                        defaultValue={species.common_name ?? ""}/>
+                        <Input
+                        defaultValue={species.common_name ?? ""}
+                        {...rest}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -217,7 +219,6 @@ export default function EditSpecies({species, userId}: SpeciesCardProps){
                       <FormLabel>Description</FormLabel>
                       <FormControl>
                         <Textarea
-                          value={value ?? ""}
                           defaultValue={species.description ?? ""}
                           {...rest}
                         />
