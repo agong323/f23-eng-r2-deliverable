@@ -33,9 +33,18 @@ export default async function SpeciesList() {
   .select("*");
 
   function CheckProfile(species: Species){
-    if(profileData == null)
-      return {id:"", email:"", display_name:"", biography:"",};
-    return (profileData.find((profile) => profile.id === species.author))
+    if(!profileData)
+      return null;
+    const match = profileData.find((profile) => profile.id === species.author);
+    if(match)
+      return match;
+
+    return {
+      id: "",
+      email: "",
+      display_name: "",
+      biography: "",
+    };
   }
 
 
@@ -47,7 +56,11 @@ export default async function SpeciesList() {
       </div>
       <Separator className="my-4" />
       <div className="flex flex-wrap justify-center">
-        {species?.map((species) => <SpeciesCard
+        {species?.sort((a, b) => {
+          const nameA = a.common_name ?? '';
+          const nameB = b.common_name ?? '';
+          return nameA.localeCompare(nameB, undefined, { sensitivity: 'base' });
+        }).map((species) => <SpeciesCard
         key={`${species.id}-${session.user.id}`}
         species={species}
         userId={session.user.id}

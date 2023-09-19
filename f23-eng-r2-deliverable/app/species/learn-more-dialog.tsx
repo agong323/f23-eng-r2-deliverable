@@ -28,7 +28,6 @@ export default function LearnMoreDialog({species, profileData}: props){
   const [openAuthorDialog, setOpenAuthorDialog] = useState<boolean>(false);
 
   function Population(){return <>{(species.total_population != null)? <>{species.total_population} {species.common_name}</>: <>Unknown</>}</>}
-  function Biography(){return <>{(profileData.biography != null) ? <>{profileData.biography}</>: <></>}</>}
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -64,16 +63,16 @@ export default function LearnMoreDialog({species, profileData}: props){
             <DialogContent>
               <DialogHeader>
                 <DialogTitle style={{ margin: '0', padding: '0', display: 'flex', justifyContent: 'space-between' }}>
-                  {profileData.display_name}
+                  {profileData?.display_name ?? "No Display Name"}
                   <Button style={{ alignSelf: 'flex-end' }} aria-label="Close alert" variant="outline" size="sm" onClick={() => setOpenAuthorDialog(false)}>
                     <Citrus color="#ff0000" className="h-4 w-4"/>
                   </Button>
                 </DialogTitle>
                 <DialogDescription style={{ margin: '0', padding: '0' }}>
-                  {profileData.email}
+                  {profileData?.email ?? "No Email"}
                 </DialogDescription>
               </DialogHeader>
-              <Biography/>
+              {profileData?.biography ?? ""}
             </DialogContent>
           </Dialog>
       </DialogFooter>
