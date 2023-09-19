@@ -4,6 +4,15 @@ import { createServerSupabaseClient } from "@/lib/server-utils";
 import { redirect } from "next/navigation";
 import AddSpeciesDialog from "./add-species-dialog";
 import SpeciesCard from "./species-card";
+import { type Database } from "@/lib/schema";
+type Species = Database["public"]["Tables"]["species"]["Row"];
+
+export interface ProfileData {
+  id : string;
+  email: string;
+  display_name: string;
+  biography: string | null;
+};
 
 export default async function SpeciesList() {
   // Create supabase server component client and obtain user session from stored cookie
@@ -19,6 +28,17 @@ export default async function SpeciesList() {
 
   const { data: species } = await supabase.from("species").select("*");
 
+  const { data: profileData} = await supabase
+  .from("profiles")
+  .select("*");
+
+  function CheckProfile(species: Species){
+    if(profileData == null)
+      return {id:"", email:"", display_name:"", biography:"",};
+    return (profileData.find((profile) => profile.id === species.author))
+  }
+
+
   return (
     <>
       <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
@@ -27,7 +47,11 @@ export default async function SpeciesList() {
       </div>
       <Separator className="my-4" />
       <div className="flex flex-wrap justify-center">
-        {species?.map((species) => <SpeciesCard key={species.id} {...species} />)}
+        {species?.map((species) => <SpeciesCard
+        key={`${species.id}-${session.user.id}`}
+        species={species}
+        userId={session.user.id}
+        profileData={CheckProfile(species)}/>)}
       </div>
     </>
   );
